@@ -40,8 +40,13 @@ class bill_info:
         key_points.append(unicodedata.normalize("NFKD",k[i].get_text(strip='True')))
     elif len(k)==1:
       k=key1.find_all('span',style='font-size:16px')
-      for i in k:
-        key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+      if not k:
+        k=key1.find_all('span',style='font-family:Times New Roman,Times,serif')
+        for i in k:
+          key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+      else:
+        for i in k:
+          key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
     else:
       for i in k:
         key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
@@ -54,7 +59,7 @@ class bill_info:
     stat=s.find_all('div',class_='field field-name-field-own-status field-type-list-text field-label-hidden')
     for i in stat:
       status.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
-    data=[heading,ministry,status,key_points]
+    data=[heading[0],ministry[3],status[len(status)-1],key_points[:len(key_points)-1]]
     return data
 
 
