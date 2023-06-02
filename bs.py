@@ -48,18 +48,32 @@ class bill_info:
         for i in k:
           key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
     else:
-      for i in k:
-        key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+      k=key1.find_all('span',style='font-family:Times New Roman,Times,serif')
+      if  k:
+       for i in k:
+         key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+      else:
+       k=key1.find_all('span',style='font-family:"Times New Roman",serif')
+       for i in k:
+         key_points.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
     head=s.find_all('a',class_='active fs-28')
     for i in head:
       heading.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
     mini=s.find('div',class_='field field-name-field-ministry field-type-taxonomy-term-reference field-label-inline clearfix')
-    for i in mini:
-      ministry.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+    if mini:
+        for i in mini:
+         ministry.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+        ministry=ministry[3]  
+    else:
+         ministry.append('None')
+         ministry=ministry[0]
     stat=s.find_all('div',class_='field field-name-field-own-status field-type-list-text field-label-hidden')
-    for i in stat:
-      status.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
-    data=[heading[0],ministry[3],status[len(status)-1],key_points[:len(key_points)-1]]
+    if stat:
+        for i in stat:
+          status.append(unicodedata.normalize("NFKD",i.get_text(strip='True')))
+    else:
+        status.append('Unkown')
+    data=[heading[0],ministry,status[len(status)-1],key_points[:len(key_points)-1]]
     return data
 
 
@@ -68,7 +82,7 @@ class bill_info:
     print('\n KEY POINTS : \n')
     for i in range(len(key_points)-1):
       print(key_points[i]+'\n')
-    print('\n ministry : \n\n'+ministry[3]+'\n\n')
+    print('\n ministry : \n\n'+ministry+'\n\n')
     print(' status : \n')
     if status[len(status)-1]=='Passed':
       print('Passed')
